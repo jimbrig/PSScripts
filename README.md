@@ -4,7 +4,7 @@
     <a href="https://powershellgallery.com/profiles/jimbrig" target="_blank"><img src="https://img.shields.io/badge/PowerShell%20Gallery-jimbrig-blue" /></a>
 
 > **Note**  
-> This repository contains a collection of PowerShell scripts that I have written for various purposes and published to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).
+> Collection of PowerShell scripts that I have written for various purposes and published to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).
 </p>
 
 ## Contents
