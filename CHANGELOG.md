@@ -8,6 +8,7 @@
 
 ### Documentation
 
+- Add CHANGELOG to README
 - Cleanup README
 - Enhance README
 - Add initial README
