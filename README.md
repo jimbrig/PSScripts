@@ -2,10 +2,11 @@
     <img src="https://github.com/jimbrig/PSXLDevTools/blob/main/resources/images/powershellcore.png?raw=true" align="left" style="float:right" height="8%" width="8%">
     <h1>Custom PowerShell Scripts</h1>
     <a href="https://powershellgallery.com/profiles/jimbrig" target="_blank"><img src="https://img.shields.io/badge/PowerShell%20Gallery-jimbrig-blue" /></a>
+</p>
 
 > **Note**  
 > Collection of PowerShell scripts that I have written for various purposes and published to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).
-</p>
+
 
 ## Contents
 
