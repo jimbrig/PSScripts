@@ -1,18 +1,28 @@
-# Custom PowerShell Scripts
+<p>
+    <img src="https://github.com/jimbrig/PSXLDevTools/blob/main/resources/images/powershellcore.png?raw=true" align="left" style="float:right" height="8%" width="8%">
+    <h1>Custom PowerShell Scripts</h1>
+    <a href="https://powershellgallery.com/profiles/jimbrig" target="_blank"><img src="https://img.shields.io/badge/PowerShell%20Gallery-jimbrig-blue" /></a>
 
-> This repository contains a collection of PowerShell scripts that I have written for various purposes and published 
-> to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig). 
+> **Note**  
+> This repository contains a collection of PowerShell scripts that I have written for various purposes and published to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).  
+> View my other PowerShell creations from my [PowerShell Gallery Packages Profile](https://www.powershellgallery.com/profiles/jimbrig)! 
+
+</p>
 
 ## Contents
 
 - [Overview](#overview)
 - [Installation](#installation)
+  - [Bulk Installation](#bulk-installation)
+  - [Individual Script Installation](#individual-script-installation)
+  - [Clone Locally](#clone-locally)
+- [Roadmap](#roadmap)
 - [Scripts](#scripts)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-- [Contact](#contact)
-- [Contributing](#contributing)
-- [Versioning](#versioning)
+- [Appendices](#appendices)
+  - [License](#license)
+  - [Versioning](#versioning)  
+  - [Acknowledgments](#acknowledgments)
+  - [Contact](#contact)
 
 ## Overview
 
@@ -21,39 +31,98 @@ to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbri
 
 ## Installation
 
-To install any of the scripts in this repository, you can use the `Install-Script` cmdlet from the 
+### Bulk Installation
+
+To install all scripts at once use the [Install-PSCustomScripts.ps1](Install-PSCustomScripts/Install-PSCustomScripts.ps1) script:
+
+```powershell
+Install-Script -Name Install-PSCustomScripts.ps1
+
+Install-PSCustomScripts
+```
+
+### Individual Script Installation
+
+To install any individual script listed in this repository, you can use the `Install-Script` cmdlet from the 
 [PowerShellGet](https://docs.microsoft.com/en-us/powershell/gallery/overview) module.
 
 ```powershell
-Install-Script -Name <script-name> -Repository <repository-name>
+Install-Script -Name <script-name>
 ```
 
-## Scripts
+### Clone Locally
+
+Lastly, one can simply clone or download the scripts for use locally:
+
+```bash
+# SSH
+git clone git@github.com:jimbrig/PSScripts.git
+
+# HTTPS
+https://github.com/jimbrig/PSScripts.git
+
+# Github-CLI
+gh repo clone jimbrig/PSScripts
+```
+
+## Roadmap
 
 - [Get-FileHash]() - Calculates the hash of a file using the specified algorithm.
 
-- [ConverTo-Markdown](./ConvertTo-Markdown/) - Converts a string to Markdown.
+## Scripts
 
-## License
+
+### [ConvertTo-Markdown](./ConvertTo-Markdown/)
+
+This script converts a string to Markdown.
+
+```powershell
+
+```
+
+### [Read-HostSecret](Read-HostSecret) 
+
+This script reads an encrypted secret from the user.
+
+```powershell
+
+```
+
+### [Set-FolderIcon](Set-FolderIcon)
+
+Sets the icon for a folder:
+
+```powershell
+
+```
+
+### [Update-PSModules](Update-PSModules)
+
+Update all modules at once:
+
+```powershell
+
+```
+
+## Appendices
+
+### License
 
 This project is licensed under the [Unlicense](https://unlicense.org/). See the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+### Versioning
 
-- [PurpleBooth](https://gist.github.com/PurpleBooth) for the [README template](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
+I use [Semantic Versioning](http://semver.org/) for versioning all the scripts.
 
-## Contact
+### Acknowledgments
 
-- [Jim Briggs](https://jimbrig.com)
+> Hat tip to anyone whose code was used:
 
-## Contributing
+- https://github.com/riedyw/PoshFunctions
+- https://github.com/riedyw/MyPoshFunctions/tree/master
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+### Contact
 
-## Versioning
+- [jimmy.briggs@jimbrig.com](mailto:jimmy.briggs@jimbrig.com)
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository]()
 
-## Acknowledgments
-
-- Hat tip to anyone whose code was used
