@@ -8,7 +8,6 @@
 > **Note**  
 > Collection of PowerShell scripts that I have written for various purposes and published to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).
 
-
 ## Contents
 
 - [Overview](#overview)
@@ -25,6 +24,9 @@
   - [Contact](#contact)
 
 ## Overview
+
+> **Note**
+> *View the Repository's [CHANGELOG](CHANGELOG.md) for the latest updates and changes made over time*
 
 This repository contains a collection of PowerShell scripts that I have written for various purposes and published 
 to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).
