@@ -6,7 +6,7 @@
 <br>
 
 > **Note**  
-> Collection of PowerShell scripts that I have written for various purposes and published to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).
+> Collection of PowerShell Scripts published to my [Powershell Gallery Profile](https://powershellgallery.com/profiles/jimbrig).
 
 ## Contents
 
