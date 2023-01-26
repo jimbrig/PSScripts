@@ -6,6 +6,11 @@
 
 ## [Unreleased]
 
+### Bug Fixes
+
+- Fix Build.ps1 filters
+- Add description to `Add-GodModeShortcut.ps1` so can publish
+
 ### Documentation
 
 - Add CHANGELOG to README
@@ -16,6 +21,8 @@
 
 ### Features
 
+- Add new scripts nupkgs to local registry
+- Add new utility function for publishing
 - Add `Test-IsAdmin` Script
 - Add `Get-GitHubRelease` Script
 - Add `Export-PowerQuery` Script
