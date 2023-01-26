@@ -16,6 +16,10 @@
 
 ### Features
 
+- Add `Test-IsAdmin` Script
+- Add `Get-GitHubRelease` Script
+- Add `Export-PowerQuery` Script
+- Add new `Add-GodModeShortcut` Script
 - Fix / tweak git-cliff config
 - Generated local package repo .LocalRegistry for .nupkgs
 - Add new script Update-PSModules.ps1
