@@ -35,6 +35,8 @@ Initial Release
 <# 
     .SYNOPSIS
         Adds a desktop shortcut for the `GodMode` Windows Advanced Options.
+    .DESCRIPTION
+        Adds a desktop shortcut for the `GodMode` Windows Advanced Options.
     .EXAMPLE
         Add-GodModeShortcut
         
