@@ -1,7 +1,7 @@
-$dirs = (Get-ChildItem -Path $PSScriptRoot -Directory -Recurse).Name
-$scriptFiles = $dirs | ForEach-Object { Get-ChildItem -Path "$PSScriptRoot\$_" -Filter *.ps1 -Recurse }
+$dirs = (Get-ChildItem -Path $PSScriptRoot -Directory -Recurse -Exclude @('.utils', '.github', '.git', '.LocalRegistry', 'workflows')).Name
+$scriptFiles = ForEach ($dir in $dirs) { ".\$dir\$dir.ps1" }  # $dirs | ForEach-Object { Get-ChildItem -Path "$PSScriptRoot\$_" -Filter *.ps1 -Recurse }
 
-$localRegistry = "$PSScriptRoot\.LocalRegistry"
+$localRegistry = ".\.LocalRegistry"
 
 If ($scriptFiles.Count -eq 0) {
     Write-Warning "No script files found."
