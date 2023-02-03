@@ -21,6 +21,7 @@
 
 ### Features
 
+- Add NerdFont
 - Add Install-NerdFont.ps1
 - Add new scripts nupkgs to local registry
 - Add new utility function for publishing
