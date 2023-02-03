@@ -21,6 +21,7 @@
 
 ### Features
 
+- Add nupkg for nerdfont script
 - Add NerdFont
 - Add Install-NerdFont.ps1
 - Add new scripts nupkgs to local registry
