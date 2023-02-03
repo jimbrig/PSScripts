@@ -1,4 +1,38 @@
 #Requires -Version 3.0
+
+<#PSScriptInfo
+
+.VERSION 1.0.0
+
+.GUID c98fc2ce-fe63-4b07-9ed2-5a0fdaf208ae
+
+.AUTHOR Jimmy Briggs
+
+.COMPANYNAME jimbrig
+
+.COPYRIGHT Jimmy Briggs | 2023
+
+.TAGS Fonts Installation Nerd-Font Admin Design Machine Settings Utility Setup
+
+.LICENSEURI https://github.com/jimbrig/PSScripts/blob/main/LICENSE
+
+.PROJECTURI https://github.com/jimbrig/PSScripts/Install-NerdFont/
+
+.ICONURI
+
+.EXTERNALMODULEDEPENDENCIES 
+
+.REQUIREDSCRIPTS
+
+.EXTERNALSCRIPTDEPENDENCIES
+
+.RELEASENOTES
+Initial Release
+
+.PRIVATEDATA
+
+#>
+
 <#
 .SYNOPSIS
     Installs the provided fonts.
