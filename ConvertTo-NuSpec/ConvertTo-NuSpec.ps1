@@ -1,6 +1,3 @@
-#Requires -Modules PowerShellGet
-#Requires -Version 5.0
-
 <#PSScriptInfo
 
 .VERSION 1.0.0
@@ -21,7 +18,7 @@
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES
+.EXTERNALMODULEDEPENDENCIES PowerShellGet
 
 .REQUIREDSCRIPTS
 
