@@ -1,9 +1,9 @@
 
 <#PSScriptInfo
 
-.VERSION 1.0.3
+.VERSION 1.0.0
 
-.GUID 3187ed58-720b-4e9c-b3c2-707c00842fdf
+.GUID c76e20c6-aa94-4c7a-a846-659804422c59
 
 .AUTHOR Jimmy Briggs
 
@@ -11,11 +11,11 @@
 
 .COPYRIGHT Jimmy Briggs | 2023
 
-.TAGS PowerShell Modules Management Utility Update Cleanup
+.TAGS Windows Taskbar Notification System Form
 
 .LICENSEURI https://github.com/jimbrig/PSScripts/blob/main/LICENSE
 
-.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/Update-PSModules
+.PROJECTURI https://github.com/jimbrig/PSScripts/New-TrayNotify/
 
 .ICONURI
 
@@ -23,58 +23,56 @@
 
 .REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES Test-IsAdmin.ps1,Update-Modules.ps1
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-
-1.0.3
-Fixed Project URL
-
-1.0.2
-Added Code Signing Certificate Signature
-
-1.0.1
-Added Test-IsAdmin.ps1 and Update-Modules.ps1 to .EXTERNALSCRIPTDEPENDENCIES
-
-1.0.0
 Initial Release
 
 .PRIVATEDATA
 
 #>
 
-<#
-.SYNOPSIS
-    Updates PowerShell Modules.
-.DESCRIPTION 
-    A script for updating and cleaning up old versions of your installed PowerShell Modules. 
-.EXAMPLE
-    .\Update-PSModules.ps1
+<# 
 
-    # Updates Modules.
-.PARAMETER AllowPrerelease
-    Allows the script to update to prerelease versions of modules.
-#>
-[CmdletBinding()]
-Param (
-    [Parameter(Mandatory=$false)]
-    [switch]$AllowPrerelease
-)
+    .SYNOPSIS
+        Display a balloon tip message in the system tray.
+    .DESCRIPTION 
+        Displays a user-defined message as a balloon popup in the system tray. 
+    .NOTES
+        This function requires Windows Vista or later.
+    .PARAMETER Title
+        Title of the balloon tip.
+    .PARAMETER Message
+        Message to display in the balloon tip.
+    .PARAMETER MessageType
+        (Optional) Type of message to display in the balloon tip. Valid values are: Info, Warning, Error, or None.
+        Defaults to Info.
+    .PARAMETER SysTrayIconPath
+        (Optional) Path to the icon to display as the system tray icon. Defaults to the current process executable's icon (i.e. pwsh.exe).
+    .PARAMETER Timeout
+        (Optional) Time in milliseconds to display the balloon tip. Defaults to 5 seconds (5,000 milliseconds).
+    .EXAMPLE
+        New-TrayNotify -Title 'Hello World' -Message 'This is a test message.'
+    
+        # Displays a balloon tip with the title 'Hello World' and the message 'This is a test message.' for 5 seconds.
+    .EXAMPLE
+        New-TrayNotify -Title 'Hello World' -Message 'This is a test message.' -MessageType Warning -Timeout 10000
+    
+        # Displays a balloon tip with the title 'Hello World' and the message 'This is a test message.' for 10 seconds.
+    .EXAMPLE
+        New-TrayNotify New-DISMReport -ReportPath 'C:\Users\Public\DISMReport.txt' -Background
+    
+        # Displays a balloon tip with the title 'Hello World' and the message 'This is a test message.' for 10 seconds.
+#> 
+Param()
 
-$ErrorActionPreference = 'Stop'
 
-$ScriptRoot = Split-Path $MyInvocation.MyCommand.Path
-
-. "$ScriptRoot\Test-IsAdmin.ps1"
-. "$ScriptRoot\Update-Modules.ps1"
-
-If ($AllowPrerelease) { Update-Modules -AllowPreRelease } Else { Update-Modules }
 
 # SIG # Begin signature block
 # MIIbsQYJKoZIhvcNAQcCoIIbojCCG54CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDIbuk9VB/ZVM5X
-# hdcmiEi8Hp6Kwld63d2hMmQ0l1xV36CCFgcwggL8MIIB5KADAgECAhB+/UWa6VZ/
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCAuacxxac7Kx1Iw
+# pBkrKqe7RR/8V0L0clBhEh4ZqkxR+aCCFgcwggL8MIIB5KADAgECAhB+/UWa6VZ/
 # pk89wo9qoFZLMA0GCSqGSIb3DQEBCwUAMBYxFDASBgNVBAMMC0ppbUJyaWdEZXZ0
 # MB4XDTIzMDIxNjIyNTIxN1oXDTI0MDIxNjIzMTIxN1owFjEUMBIGA1UEAwwLSmlt
 # QnJpZ0RldnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCf1gVGlos2
@@ -195,28 +193,28 @@ If ($AllowPrerelease) { Update-Modules -AllowPreRelease } Else { Update-Modules 
 # jDGCBQAwggT8AgEBMCowFjEUMBIGA1UEAwwLSmltQnJpZ0RldnQCEH79RZrpVn+m
 # Tz3Cj2qgVkswDQYJYIZIAWUDBAIBBQCggYQwGAYKKwYBBAGCNwIBDDEKMAigAoAA
 # oQKAADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4w
-# DAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQgGvWOx0PHwBr999a+U8BWPeZa
-# g/XbHDYZhMXUEjMOQeYwDQYJKoZIhvcNAQEBBQAEggEAjmoYLzFk+6U0mHqYHd8X
-# hFBh7vPMwh3AuQ6AN0Y6djjgOUJwMJeaQLqXjI167YFU5FYaMJMggkZ4Ek7UcJdd
-# G/mUvkiOOr3aeMmxAALJE2ylUwWxmtEU4t9DYd8i/nACaIgEGySfX+EmgtBNiW4z
-# ykdtM3omt1Z71uYprUrnf458u5iyf4ZeQTgvS+Pa/eCRL+jrvtHDIcIee004Cf2Y
-# DPNxIHIiUifM8NjQfz1X7xisLf4YUamZPf1qu5OUCKpPEMcVV4n2FtXU6487wrTi
-# SQ9wdYVBmye03xCz8Ws/ZB0Ko7WFmDypD6eBj1QdwjzWWkAIm5YoYGHiWupAUKFG
-# gqGCAyAwggMcBgkqhkiG9w0BCQYxggMNMIIDCQIBATB3MGMxCzAJBgNVBAYTAlVT
+# DAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQgvVxDwa+p5gJFg8jgGhoUKIFr
+# e9yBtzyxwieMccilTBcwDQYJKoZIhvcNAQEBBQAEggEAjUGKdRN1dlRQrLUSaHYn
+# nRgDupmaDhTQlHbDKzoyLsAKridZdfuVSHPvTUr2Dh6n2wlYM6yPiV4xUyqTXSUO
+# joWbMJnALwmLj+oFJb//sdbEuS7MYWdVM55E/hviT4LLkvTmMnV/vSfAblAn0jdJ
+# Uu8tFBAvu+fzDGjJd77s9dWvoDwxdzZiuXXY49RamA7hsZhXh5UPuAfqC5H+m5X6
+# A886Iirdm+AMUry78EUUA8iiiu+sRk4ZV6m7KTgmpjQQrH2MsYPvLJlQ8X1wdsbi
+# 9kAOI/tnvYq7t/GS37i8SCnbW8p8U5Fx2W05Rc7UfHw3pPy12yJlQAWaP35SQJ3q
+# SKGCAyAwggMcBgkqhkiG9w0BCQYxggMNMIIDCQIBATB3MGMxCzAJBgNVBAYTAlVT
 # MRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE7MDkGA1UEAxMyRGlnaUNlcnQgVHJ1
 # c3RlZCBHNCBSU0E0MDk2IFNIQTI1NiBUaW1lU3RhbXBpbmcgQ0ECEAxNaXJLlPo8
 # Kko9KQeAPVowDQYJYIZIAWUDBAIBBQCgaTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-# AQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMTYyMzQ0MjNaMC8GCSqGSIb3DQEJBDEi
-# BCD59EO75yAQmPSnHYp4Mn/MHqxkDwjWmui7UXRxCPI9tTANBgkqhkiG9w0BAQEF
-# AASCAgAGQxPYcE5U4SXfhB+4VowqiKERb8HuYsmWgGbyTTiL4OggzzeIO4dAnote
-# u4na7tbPZhDQAvzyEb8rxMtG4d/LPt2nBjI+GU9kr9+NbDu1MWQJvU0R7dkMQ71P
-# qy29Gw7kIu9CjDifDaGKL0lS+LGofX1kbV+hC4UXo2ddvhvcuFpOp/lSixz6ok3E
-# UeGUMWaDVEt57/qmy9QTrtVy6OdymnqqO6vkdcZ45KYNz56twgyezvRhwioS3V9+
-# UHj9DDo9pVZzKT2mHz5Qula14hlMPCgmnxVL1OobLQvJYElVev8OuEGuGRMpiPcE
-# 8w0ZP3CEEUAqM3+aBc2urpR9nGgRrj5HyJukaxjE9cafF62Cf5O0PF1EW0LBMVXx
-# 2cE1Rk1r39nIKwyALQTmeMMgNUs/FxR/s7KmkEUogr2qQOuy0hoNXaqpp/xAu6hk
-# T2athAIejqXCdyeGW+212JCoNoxkph1M3Aveed5xB+5ahKataeCSdRm1ht+LmIcP
-# Ucfycc5Y8XQX8xLDGQq+TXBA5q9IC4sEt15aT5W7X+AsoQmQzFBAt9ukFcS9UjjT
-# /es0ALGEa3Y2IIMFPkmnqhWaMsCdsrGiGfAjwig+anoaAr8LbCQJmmwRskpQCB1H
-# SASnzcVw1Yu3qpWeYY4xe3b41bFrbaykrxuRni3rqlSLJBVk0Q==
+# AQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMTYyMzQzMzJaMC8GCSqGSIb3DQEJBDEi
+# BCDColloeVn1PkmVjXJd14YmyU/M9pmFAQrBwl2tGiluhDANBgkqhkiG9w0BAQEF
+# AASCAgDHuQ6lgv8As3sbrYb+uPlI7n3uEnWipJhJGWNfEhxdSouklG7J3eX+YqPc
+# LfmIeGmL+ZUAYdrFzJUrlArRrulePJZsYGcCRpebGEcwxZ1bFsrnF4cXUxT6yrQ9
+# FwExwBaWzU52s9aEJTM1R90ZiQtU0gMIA6fUZ6ePzQE4Ys3+BRgNQweViBeeOJv/
+# M2TVkyjSZhPGxKMBN0zu0F2xDatKEWAuOvak8kD/NH53kaDMJB0f/Qb2k4tPecsu
+# drU3bf4wnF7pk70CWtj4T0bbYFj7OIQI37HWZ3N/P6UidVdhLONStZwlJozYxQiT
+# eL4LNOR/6AWnoreaeWDkhc5Uqqq1Pq5diLARnYCXdRgVmdmZAUhkWuez4QsYqwaW
+# 7kWRDqIXZ2ZNmd2IQYJWjcYEGewwkcJANDRAWxn7XjXOyudgBqg2mdHVZw7WtoNj
+# V8J5dcYsyphBmpg0ulZcc8UyF3e63fySzn2kLuW4kvmo+q+lR+iMSbh+zVZG+nPw
+# b5t7ShDS7r4SqeJZ/Ai0GUwYfPFEuyAO9knMpXSUZhpb7IQQ22RvscL8awPZ/yFQ
+# 1Gj0xmiIPtrqjDM6Rkzfn+oR3+7y1u9fyoUTo/z1lbqzBCmfr/Z4vatCnOBJRmFD
+# TPliqdDacF5aoA6hmL7LKUH1KxxWznx4RJn8g500L6/JX0YLcQ==
 # SIG # End signature block

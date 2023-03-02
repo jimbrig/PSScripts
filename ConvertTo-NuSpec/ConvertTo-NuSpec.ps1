@@ -1,9 +1,8 @@
-
 <#PSScriptInfo
 
-.VERSION 1.0.3
+.VERSION 1.0.0
 
-.GUID 3187ed58-720b-4e9c-b3c2-707c00842fdf
+.GUID e17689b6-f7a0-4d45-a96b-dfa0c251eb77
 
 .AUTHOR Jimmy Briggs
 
@@ -11,70 +10,94 @@
 
 .COPYRIGHT Jimmy Briggs | 2023
 
-.TAGS PowerShell Modules Management Utility Update Cleanup
+.TAGS Nuget Module Automation Tools
 
 .LICENSEURI https://github.com/jimbrig/PSScripts/blob/main/LICENSE
 
-.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/Update-PSModules
+.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/ConvertTo-NuSpec/
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES 
+.EXTERNALMODULEDEPENDENCIES PowerShellGet
 
 .REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES Test-IsAdmin.ps1,Update-Modules.ps1
+.EXTERNALSCRIPTDEPENDENCIES Functions.ps1
 
 .RELEASENOTES
 
-1.0.3
-Fixed Project URL
-
-1.0.2
-Added Code Signing Certificate Signature
-
-1.0.1
-Added Test-IsAdmin.ps1 and Update-Modules.ps1 to .EXTERNALSCRIPTDEPENDENCIES
-
-1.0.0
-Initial Release
+    1.0.0
+    Initial Release
 
 .PRIVATEDATA
 
 #>
 
 <#
-.SYNOPSIS
-    Updates PowerShell Modules.
-.DESCRIPTION 
-    A script for updating and cleaning up old versions of your installed PowerShell Modules. 
-.EXAMPLE
-    .\Update-PSModules.ps1
 
-    # Updates Modules.
-.PARAMETER AllowPrerelease
-    Allows the script to update to prerelease versions of modules.
+.SYNOPSIS
+    Convert to `.nuspec` from `.psd1`.
+
+.DESCRIPTION
+    Generates a NuGet Specification (`.nuspec`) file based on pre-existing
+    PowerShell Module Manifest (`.psd1`) file.
+
+.PARAMETER ManifestPath
+    Path to the `.psd1` module manifest.
+
+.PARAMETER DestinationFolder
+    Path to output for the `.nuspec` file.
+
+.EXAMPLE
+    ./ConvertTo-NuSpec.ps1 -ManifestPath "<path/to/module>/Module.psd1" -DestinationPath "Module.nuspec"
+
+    # Converts the module's .psd1 to .nuspec
 #>
-[CmdletBinding()]
-Param (
-    [Parameter(Mandatory=$false)]
-    [switch]$AllowPrerelease
+[CmdletBinding(PositionalBinding = $false)]
+Param(
+    [Parameter(Mandatory = $true)]
+    [ValidateScript({
+            Test-Path $_ -PathType leaf -Include '*.psd1'
+        })]
+    [string]
+    $ManifestPath,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateScript({
+            Test-Path $_ -PathType 'Container'
+        })]
+    [string]
+    $DestinationFolder
 )
 
+# Dot Source Dependent Functions
 $ErrorActionPreference = 'Stop'
 
 $ScriptRoot = Split-Path $MyInvocation.MyCommand.Path
 
-. "$ScriptRoot\Test-IsAdmin.ps1"
-. "$ScriptRoot\Update-Modules.ps1"
+. "$ScriptRoot\Functions.ps1"
 
-If ($AllowPrerelease) { Update-Modules -AllowPreRelease } Else { Update-Modules }
+Write-Output -InputObject "Generating .nuspec file based on PowerShell Module Manifest '$ManifestPath'"
+$param = @{
+    'ManifestPath' = $ManifestPath
+}
+If ($PSBoundParameters.ContainsKey('DestinationFolder')) {
+    $param.Add('DestinationFolder', $DestinationFolder)
+}
+$NuspecFile = New-NuSpecFile @param
+If ($NuspecFile) {
+    Write-Output "Nuspec file created - '$NuspecFile'."
+    Write-Output 'Done. '
+}
+else {
+    Write-Error 'Failed to create Nuspec file.'
+}
 
 # SIG # Begin signature block
 # MIIbsQYJKoZIhvcNAQcCoIIbojCCG54CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDIbuk9VB/ZVM5X
-# hdcmiEi8Hp6Kwld63d2hMmQ0l1xV36CCFgcwggL8MIIB5KADAgECAhB+/UWa6VZ/
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBXiV3sxF2unhwA
+# ASJIlP3nGJ9EpJip+pQqwNxQ8cqHjKCCFgcwggL8MIIB5KADAgECAhB+/UWa6VZ/
 # pk89wo9qoFZLMA0GCSqGSIb3DQEBCwUAMBYxFDASBgNVBAMMC0ppbUJyaWdEZXZ0
 # MB4XDTIzMDIxNjIyNTIxN1oXDTI0MDIxNjIzMTIxN1owFjEUMBIGA1UEAwwLSmlt
 # QnJpZ0RldnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCf1gVGlos2
@@ -195,28 +218,28 @@ If ($AllowPrerelease) { Update-Modules -AllowPreRelease } Else { Update-Modules 
 # jDGCBQAwggT8AgEBMCowFjEUMBIGA1UEAwwLSmltQnJpZ0RldnQCEH79RZrpVn+m
 # Tz3Cj2qgVkswDQYJYIZIAWUDBAIBBQCggYQwGAYKKwYBBAGCNwIBDDEKMAigAoAA
 # oQKAADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4w
-# DAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQgGvWOx0PHwBr999a+U8BWPeZa
-# g/XbHDYZhMXUEjMOQeYwDQYJKoZIhvcNAQEBBQAEggEAjmoYLzFk+6U0mHqYHd8X
-# hFBh7vPMwh3AuQ6AN0Y6djjgOUJwMJeaQLqXjI167YFU5FYaMJMggkZ4Ek7UcJdd
-# G/mUvkiOOr3aeMmxAALJE2ylUwWxmtEU4t9DYd8i/nACaIgEGySfX+EmgtBNiW4z
-# ykdtM3omt1Z71uYprUrnf458u5iyf4ZeQTgvS+Pa/eCRL+jrvtHDIcIee004Cf2Y
-# DPNxIHIiUifM8NjQfz1X7xisLf4YUamZPf1qu5OUCKpPEMcVV4n2FtXU6487wrTi
-# SQ9wdYVBmye03xCz8Ws/ZB0Ko7WFmDypD6eBj1QdwjzWWkAIm5YoYGHiWupAUKFG
-# gqGCAyAwggMcBgkqhkiG9w0BCQYxggMNMIIDCQIBATB3MGMxCzAJBgNVBAYTAlVT
+# DAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQgMjMUsZXv1CFKSMAIuMknhzMS
+# Qic2xVUTm8ALfyBCfjgwDQYJKoZIhvcNAQEBBQAEggEAmXo3PiaXLAwnjF1qYl0A
+# uOZ5MR5AISxSyGRb8eT06zMuJISSukzl1DU1lNe4h5AnHlKfwZ2p9oKrwsmuaV5y
+# pUt/brcZJq/ylfSUlKHq5ZAJ0jkHArvnDOwKg8PS+ugHpro0U70YMYscRvYyhFxL
+# WLl8w4XlF7IQtAMIbeoPOvBTKPBYTRuVLX0vAiUA1gsFxSB73ienmATiKpKi5Q15
+# cmt8hmEHMnNz1aqM6N02MVi/ygEsu6wFcaEWcAcXNENKTjDpIyZC8zxfbv/88BTU
+# LnqZ3amJ6AL9jqWhBuAkr88RQXpTIa+a7xmMiZyqYpYy/M/VxZxcGI1z9XG/Z2gb
+# 0qGCAyAwggMcBgkqhkiG9w0BCQYxggMNMIIDCQIBATB3MGMxCzAJBgNVBAYTAlVT
 # MRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE7MDkGA1UEAxMyRGlnaUNlcnQgVHJ1
 # c3RlZCBHNCBSU0E0MDk2IFNIQTI1NiBUaW1lU3RhbXBpbmcgQ0ECEAxNaXJLlPo8
 # Kko9KQeAPVowDQYJYIZIAWUDBAIBBQCgaTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-# AQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAyMTYyMzQ0MjNaMC8GCSqGSIb3DQEJBDEi
-# BCD59EO75yAQmPSnHYp4Mn/MHqxkDwjWmui7UXRxCPI9tTANBgkqhkiG9w0BAQEF
-# AASCAgAGQxPYcE5U4SXfhB+4VowqiKERb8HuYsmWgGbyTTiL4OggzzeIO4dAnote
-# u4na7tbPZhDQAvzyEb8rxMtG4d/LPt2nBjI+GU9kr9+NbDu1MWQJvU0R7dkMQ71P
-# qy29Gw7kIu9CjDifDaGKL0lS+LGofX1kbV+hC4UXo2ddvhvcuFpOp/lSixz6ok3E
-# UeGUMWaDVEt57/qmy9QTrtVy6OdymnqqO6vkdcZ45KYNz56twgyezvRhwioS3V9+
-# UHj9DDo9pVZzKT2mHz5Qula14hlMPCgmnxVL1OobLQvJYElVev8OuEGuGRMpiPcE
-# 8w0ZP3CEEUAqM3+aBc2urpR9nGgRrj5HyJukaxjE9cafF62Cf5O0PF1EW0LBMVXx
-# 2cE1Rk1r39nIKwyALQTmeMMgNUs/FxR/s7KmkEUogr2qQOuy0hoNXaqpp/xAu6hk
-# T2athAIejqXCdyeGW+212JCoNoxkph1M3Aveed5xB+5ahKataeCSdRm1ht+LmIcP
-# Ucfycc5Y8XQX8xLDGQq+TXBA5q9IC4sEt15aT5W7X+AsoQmQzFBAt9ukFcS9UjjT
-# /es0ALGEa3Y2IIMFPkmnqhWaMsCdsrGiGfAjwig+anoaAr8LbCQJmmwRskpQCB1H
-# SASnzcVw1Yu3qpWeYY4xe3b41bFrbaykrxuRni3rqlSLJBVk0Q==
+# AQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAzMDIxNjA3NDNaMC8GCSqGSIb3DQEJBDEi
+# BCABtmkk2WF5RP0D/5Q/R/RPBZW5yCaPhRAfklaUCDg0fzANBgkqhkiG9w0BAQEF
+# AASCAgBqCEpKGneT1s92WoErrRc98meZ9DFwwvE5mrTbWmDt13BBeuZ5PpFKh4cv
+# YI+JaPWXeLpaElLVqy5HPHGbD89EkQ2BQCtF3boVjBMsFDJcQ4uaSavyesSsqhK/
+# eHCNpWJMbrBTHwumeGYiP+LpR6itiL+aB+R9SoWBu1VvmHv78GJwSoj3hPsdXETP
+# wybmXJ7LehbbTt99kvNr9o0Rka4Y+SxTARvJm2KEetkPftOr8TjCQ+HOrz1cYSCr
+# 80357N0DEOXcRWvDIVYcQgZnz1u37NxcS5GLBiftpQgXdGgpMM4f4DDeSmtWCLvZ
+# YbbAjRLorgo1LL/rle93OY/aoyUc9KWkCsfjyoyos2mLI+6lyZZ4Q8V0KL+qf1GQ
+# YoEW/WyARfMWSK7J/KzzDt9jtboarKkcO/wA6pSFNWsVnkLCDyN4FcdPzCFoeqqW
+# WnIND12uChKEmomzdbMFjejWWgQBwIswbYguczyCLTU1nV1T3ASiwtulLDS2pty7
+# Gm+jx2grC+fLrrhzir/ywWVwBUDKhvR5rHVzIfYeYGQVXo5jqdYT/ILWXq8XLl0S
+# QsQ75y30cjj1NxnWK6ZPuKjDlXeb2KjywjJStOKnO68ruanASIe3gcvk+ZCtSYoX
+# N55yzvjAqqHBSBqpDraORqzmw8qLnDAFKnIT1ZVhsSvWaHADtw==
 # SIG # End signature block

@@ -42,7 +42,7 @@ Function New-PSCustomScript {
         Guid                       = (New-Guid)
         Copyright                  = 'Jimmy Briggs | 2023'
         LicenseUri                 = 'https://github.com/jimbrig/PSScripts/blob/main/LICENSE'
-        ProjectUri                 = "https://github.com/jimbrig/PSScripts/$ScriptName/"
+        ProjectUri                 = "https://github.com/jimbrig/PSScripts/tree/main/$ScriptName/"
         ReleaseNotes               = "$ReleaseNotes"
         # IconUri                    = ''
         # ExternalModuleDependencies = ''
