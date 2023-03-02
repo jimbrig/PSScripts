@@ -8,6 +8,8 @@
 
 ### Bug Fixes
 
+- Add external module deps for script
+- Fix link to GitHub in Script Template
 - Fix Build.ps1 filters
 - Add description to `Add-GodModeShortcut.ps1` so can publish
 
@@ -22,6 +24,13 @@
 
 ### Features
 
+- Built nupkg
+- Gitflow-feature-stash: traynotify
+- Build script to nupkg
+- Add ConvertTo-NuSpec.ps1
+- Add signature injection to the build script
+- Add signatures to scripts
+- Add new utility self-signed cert signature helpers
 - Add nupkg for nerdfont script
 - Add NerdFont
 - Add Install-NerdFont.ps1
