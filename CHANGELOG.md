@@ -15,6 +15,7 @@
 
 ### Documentation
 
+- Add README for Trace-NetworkAdapter script
 - Fix README links
 - Add CHANGELOG to README
 - Cleanup README
@@ -24,6 +25,8 @@
 
 ### Features
 
+- Publish nupkg for Trace-NetworkAdapter script to LocalRegistry
+- Add Trace-NetworkAdapter Script
 - Built nupkg
 - Gitflow-feature-stash: traynotify
 - Build script to nupkg
