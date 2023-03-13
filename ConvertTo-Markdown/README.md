@@ -1,6 +1,6 @@
-# Add-GodModeShortcut
+# ConvertTo-Markdown
 
-[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Add-GodModeShortcut?include_prereleases)](https://www.powershellgallery.com/packages/Add-GodModeShortcut/)
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/ConvertTo-Markdown?include_prereleases)](https://www.powershellgallery.com/packages/ConvertTo-Markdown/)
 
 > Convert pipeline output to a markdown document.
 
