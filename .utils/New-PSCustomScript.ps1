@@ -33,17 +33,17 @@ Function New-PSCustomScript {
     )
 
     $CommonParams = @{
-        Path                       = "$PWD\$ScriptName\$ScriptName.ps1"
-        Description                = "$Description"
-        Tags                       = $Tags
-        Version                    = "$ScriptVersion"
-        Author                     = 'Jimmy Briggs'
-        CompanyName                = 'jimbrig'
-        Guid                       = (New-Guid)
-        Copyright                  = 'Jimmy Briggs | 2023'
-        LicenseUri                 = 'https://github.com/jimbrig/PSScripts/blob/main/LICENSE'
-        ProjectUri                 = "https://github.com/jimbrig/PSScripts/tree/main/$ScriptName/"
-        ReleaseNotes               = "$ReleaseNotes"
+        Path         = "$PWD\$ScriptName\$ScriptName.ps1"
+        Description  = "$Description"
+        Tags         = $Tags
+        Version      = "$ScriptVersion"
+        Author       = 'Jimmy Briggs'
+        CompanyName  = 'jimbrig'
+        Guid         = (New-Guid)
+        Copyright    = 'Jimmy Briggs | 2023'
+        LicenseUri   = 'https://github.com/jimbrig/PSScripts/blob/main/LICENSE'
+        ProjectUri   = "https://github.com/jimbrig/PSScripts/tree/main/$ScriptName/"
+        ReleaseNotes = "$ReleaseNotes"
         # IconUri                    = ''
         # ExternalModuleDependencies = ''
         # RequiredScripts            = ''
@@ -55,11 +55,11 @@ Function New-PSCustomScript {
     New-ScriptFileInfo @CommonParams -Verbose -Force
 
     New-Item -ItemType File -Path "$PWD\$ScriptName\README.md" -Force -ErrorAction SilentlyContinue
- 
+
     $mdTags = $Tags -join ', '
 
-    $galleryBadge = "[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/$ScriptName?color=0092ff&label=PowerShell%20Gallery&logoColor=0092ff)](https://www.powershellgallery.com/packages/$ScriptName/$ScriptVersion)"
-
+    $galleryBadge = "[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/$ScriptName?include_prereleases)](https://www.powershellgallery.com/packages/$ScriptName/)"
+    
     $mdContent = @"
 # $ScriptName
 
