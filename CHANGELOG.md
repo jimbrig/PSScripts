@@ -8,6 +8,8 @@
 
 ### Bug Fixes
 
+- Fix markdown in New-PSCustomScript util
+- Fix all READMEs and badges
 - Add external module deps for script
 - Fix link to GitHub in Script Template
 - Fix Build.ps1 filters
