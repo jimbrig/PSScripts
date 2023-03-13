@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.0.1
+.VERSION 1.0.2
 
 .GUID ad6c0995-0367-4d91-bc81-88839dae144c
 
@@ -15,7 +15,7 @@
 
 .LICENSEURI https://github.com/jimbrig/PSScripts/blob/main/LICENSE
 
-.PROJECTURI https://github.com/jimbrig/PSScripts/Add-GodModeShortcut/
+.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/Add-GodModeShortcut/
 
 .ICONURI
 
@@ -26,7 +26,15 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Initial Release
+
+### Version 1.0.2
+    Altered Metadata to match new template.
+
+### Version 1.0.1
+    Updated / Enhanced Code.
+
+### Version 1.0.0
+    Initial Release
 
 .PRIVATEDATA
 

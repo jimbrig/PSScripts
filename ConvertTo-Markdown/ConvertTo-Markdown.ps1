@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.0.1
+.VERSION 1.0.2
 
 .GUID d70bbd5b-cb13-4e00-9846-284ed0d596cb
 
@@ -15,7 +15,7 @@
 
 .LICENSEURI https://github.com/jimbrig/PSScripts/blob/main/LICENSE
 
-.PROJECTURI https://github.com/jimbrig/PSScripts/ConvertTo-Markdown/
+.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/ConvertTo-Markdown/
 
 .ICONURI
 

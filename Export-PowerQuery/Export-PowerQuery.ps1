@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.0.1
+.VERSION 1.0.2
 
 .GUID 8b80dbcc-b787-47b0-9e3f-96c73cb7f72b
 
@@ -15,7 +15,7 @@
 
 .LICENSEURI https://github.com/jimbrig/PSScripts/blob/main/LICENSE
 
-.PROJECTURI https://github.com/jimbrig/PSScripts/Export-PowerQuery/
+.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/Export-PowerQuery/
 
 .ICONURI
 
@@ -26,7 +26,12 @@
 .EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
-Initial Release
+
+    1.0.2: Fixed Link to Project in Metadata
+
+    1.0.1: Updated to use DataMashup PowerShell Module
+
+    1.0.0: Initial Release
 
 .PRIVATEDATA
 
