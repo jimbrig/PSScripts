@@ -1,7 +1,6 @@
 # Add-GodModeShortcut
 
-[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/=0092ff&label=PowerShell%20Gallery&logoColor=0092ff)](https://www.powershellgallery.com/packages/Add-GodModeShortcut/1.0.0)
-
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Add-GodModeShortcut?include_prereleases)](https://www.powershellgallery.com/packages/Add-GodModeShortcut/)
 > Adds a Desktop Shortcut for the Windows `GodMode` Advanced Options
 
 ## Tags
