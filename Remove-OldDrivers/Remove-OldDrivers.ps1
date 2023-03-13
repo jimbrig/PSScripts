@@ -1,8 +1,10 @@
+#Requires -RunAsAdministrator
+
 <#PSScriptInfo
 
-.VERSION 1.0.0
+.VERSION 1.0.1
 
-.GUID e17689b6-f7a0-4d45-a96b-dfa0c251eb77
+.GUID b2930808-0381-4d63-b721-e94de2f7db83
 
 .AUTHOR Jimmy Briggs
 
@@ -10,94 +12,104 @@
 
 .COPYRIGHT Jimmy Briggs | 2023
 
-.TAGS Nuget Module Automation Tools
+.TAGS Windows Drivers Cleanup Admin
 
 .LICENSEURI https://github.com/jimbrig/PSScripts/blob/main/LICENSE
 
-.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/ConvertTo-NuSpec/
+.PROJECTURI https://github.com/jimbrig/PSScripts/tree/main/Remove-OldDrivers.ps1/
 
 .ICONURI
 
-.EXTERNALMODULEDEPENDENCIES PowerShellGet
+.EXTERNALMODULEDEPENDENCIES 
 
 .REQUIREDSCRIPTS
 
-.EXTERNALSCRIPTDEPENDENCIES Functions.ps1
+.EXTERNALSCRIPTDEPENDENCIES
 
 .RELEASENOTES
 
-    1.0.0
-    Initial Release
+  1.0.1 - Added WhatIf parameter
+  
+  1.0.0 - Initial Release
 
 .PRIVATEDATA
 
 #>
 
-<#
+<# 
 
-.SYNOPSIS
-    Convert to `.nuspec` from `.psd1`.
+  .DESCRIPTION 
+    Delete old drivers using the `Get-WindowsDriver` CmdLet.
+  
+  .PARAMETER Force
+    Remove the drivers without prompting for confirmation.
 
-.DESCRIPTION
-    Generates a NuGet Specification (`.nuspec`) file based on pre-existing
-    PowerShell Module Manifest (`.psd1`) file.
-
-.PARAMETER ManifestPath
-    Path to the `.psd1` module manifest.
-
-.PARAMETER DestinationFolder
-    Path to output for the `.nuspec` file.
-
-.EXAMPLE
-    ./ConvertTo-NuSpec.ps1 -ManifestPath "<path/to/module>/Module.psd1" -DestinationPath "Module.nuspec"
-
-    # Converts the module's .psd1 to .nuspec
-#>
-[CmdletBinding(PositionalBinding = $false)]
+  .PARAMETER WhatIf
+    Show what would be removed without actually removing anything.
+#> 
+[CmdletBinding()]
 Param(
-    [Parameter(Mandatory = $true)]
-    [ValidateScript({
-            Test-Path $_ -PathType leaf -Include '*.psd1'
-        })]
-    [string]
-    $ManifestPath,
-
-    [Parameter(Mandatory = $false)]
-    [ValidateScript({
-            Test-Path $_ -PathType 'Container'
-        })]
-    [string]
-    $DestinationFolder
+  [Parameter()]
+  [switch]$Force,
+  [Parameter()]
+  [switch]$WhatIf
 )
 
-# Dot Source Dependent Functions
-$ErrorActionPreference = 'Stop'
-
-$ScriptRoot = Split-Path $MyInvocation.MyCommand.Path
-
-. "$ScriptRoot\Functions.ps1"
-
-Write-Output -InputObject "Generating .nuspec file based on PowerShell Module Manifest '$ManifestPath'"
-$param = @{
-    'ManifestPath' = $ManifestPath
+$OriginalFileName = @{
+  Name       = "OriginalFileName"
+  Expression = { $_.OriginalFileName | Split-Path -Leaf }
 }
-If ($PSBoundParameters.ContainsKey('DestinationFolder')) {
-    $param.Add('DestinationFolder', $DestinationFolder)
+
+$Date = @{
+  Name       = "Date"
+  Expression = { $_.Date.Tostring().Split("")[0] }
 }
-$NuspecFile = New-NuSpecFile @param
-If ($NuspecFile) {
-    Write-Output "Nuspec file created - '$NuspecFile'."
-    Write-Output 'Done. '
-}
-else {
-    Write-Error 'Failed to create Nuspec file.'
+
+$AllDrivers = Get-WindowsDriver -Online -All | `
+  Where-Object -FilterScript { $_.Driver -like 'oem*inf' } | `
+  Select-Object -Property $OriginalFileName, Driver, ClassDescription, ProviderName, $Date, Version
+
+Write-Verbose "`nAll installed third-party drivers" -Verbose
+($AllDrivers | Sort-Object -Property ClassDescription | Format-Table -AutoSize -Wrap | Out-String).Trim()
+
+$DriverGroups = $AllDrivers | Group-Object -Property OriginalFileName | `
+  Where-Object -FilterScript { $_.Count -gt 1 }
+
+Write-Verbose "`nDuplicate drivers" -Verbose
+($DriverGroups | ForEach-Object -Process { $_.Group | Sort-Object -Property Date -Descending | Select-Object -Skip 1 } | Format-Table | Out-String).Trim()
+
+$DriversToRemove = $DriverGroups | ForEach-Object -Process { $_.Group | Sort-Object -Property Date -Descending | Select-Object -Skip 1 }
+
+Write-Verbose "`nDrivers to remove" -Verbose
+($DriversToRemove | Sort-Object -Property ClassDescription | Format-Table | Out-String).Trim()
+
+foreach ($item in $DriversToRemove) {
+  $Name = $($item.Driver).Trim()
+  Write-Verbose "Removing $Name" -Verbose
+  if ($WhatIf) {
+    Write-Verbose "Would remove $Name" -Verbose
+    continue
+  }
+  if ($Force) {
+    pnputil.exe /delete-driver "$Name" /force
+  }
+  else {
+    Read-Host -Prompt "Remove $Name? (y/n)"
+    if ($_.Trim().ToLower() -eq 'y') {
+      Write-Verbose "Removing $Name" -Verbose
+      pnputil.exe /delete-driver "$Name" /force
+    }
+    else {
+      Write-Verbose "Skipping $Name" -Verbose
+    }
+  }
 }
 
 # SIG # Begin signature block
 # MIIbsQYJKoZIhvcNAQcCoIIbojCCG54CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCA+xOKOPzpdRbA9
-# Rkkck2AMmo8pk7FZmIlrf/JGAWSl6aCCFgcwggL8MIIB5KADAgECAhBvRxLIstso
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCA3AImFHoxEZsAb
+# zNW8qjQlI2BnCevZPZrF3VYmc8H4LqCCFgcwggL8MIIB5KADAgECAhBvRxLIstso
 # kkFFgS0muvCbMA0GCSqGSIb3DQEBCwUAMBYxFDASBgNVBAMMC0ppbUJyaWdEZXZ0
 # MB4XDTIzMDMxMDIzMjY1NVoXDTI0MDMxMDIzNDY1NVowFjEUMBIGA1UEAwwLSmlt
 # QnJpZ0RldnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDHDgwOjMvc
@@ -218,28 +230,28 @@ else {
 # jDGCBQAwggT8AgEBMCowFjEUMBIGA1UEAwwLSmltQnJpZ0RldnQCEG9HEsiy2yiS
 # QUWBLSa68JswDQYJYIZIAWUDBAIBBQCggYQwGAYKKwYBBAGCNwIBDDEKMAigAoAA
 # oQKAADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4w
-# DAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQgJ0LsI3p5MffBRn/ZBSzA4HND
-# rS7p6ZhUNDScK17++q4wDQYJKoZIhvcNAQEBBQAEggEAIO38JPqm1gR7P9bV2V05
-# 5a2RFW3pmvbPoAXrCSX+fhFQxq4/owS9D6SlGInbgAgprXE8CVIt0rqax1sofgwG
-# HHc1sLnF7mvLINViqQXH7dvZ4R/DNy0d4a2Xi36cvk2K+3UU0AAwEg3291x0CL1d
-# bQdjGN001eZpum+nO+9wBXSs026wFohWSYLJeQ8rn7M60gc7lHB4KrFgYW3M3Vyc
-# nbpjk01ljC19enwU8y363jU7eMSNUdsOa7IeyP8X4T//5tHAUh4+f6EFilRWTi8t
-# 4ov3o2nqI4lSgoXgonI+qvajkXfsw6CQmk5DctY/3gI9I1LldpQrBP5GuUM9fqzo
-# EKGCAyAwggMcBgkqhkiG9w0BCQYxggMNMIIDCQIBATB3MGMxCzAJBgNVBAYTAlVT
+# DAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQgvguAd3ZkHYKr+R5rkKzFTY+x
+# ciusHaPTkphnfuqlrYswDQYJKoZIhvcNAQEBBQAEggEArfNuM3uxqsoDg/jDBNKI
+# uUeKtqyyVLQudpqMDt1g4MBCrZY8JdhqJlxrgtkYv/Ps+1WA+vkf+5Z25eK7z7j6
+# yO+7cvNz/NVbCXHXN0Vx9djbeOrh6Ze/3V7J7egYVKMOl2cyx4Aslt0PKGU7HUQJ
+# b28Rk8yngVPXyQbqouNd+jjGQukA40mm3vn2MzuzfNB3Kou5ULnzJPHvJp4hmFqD
+# eIU2aYtXKiCcTN4wq2U2Ax/HrhSlrzqzAdeypQOKYBKuNEJuJLk8nElJpeoWrvpV
+# Xpno4e7TG0iePq6X8YVeiqEalqA9TUK6xCxgUgW5b8N0GL2Nd/hBak5yBDmK+KC5
+# SqGCAyAwggMcBgkqhkiG9w0BCQYxggMNMIIDCQIBATB3MGMxCzAJBgNVBAYTAlVT
 # MRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE7MDkGA1UEAxMyRGlnaUNlcnQgVHJ1
 # c3RlZCBHNCBSU0E0MDk2IFNIQTI1NiBUaW1lU3RhbXBpbmcgQ0ECEAxNaXJLlPo8
 # Kko9KQeAPVowDQYJYIZIAWUDBAIBBQCgaTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcN
-# AQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAzMTMwMDI2MzlaMC8GCSqGSIb3DQEJBDEi
-# BCCteYvW3JwQ9vzuHQAf3rq79ggcugbgzulPhDTy3WoBmTANBgkqhkiG9w0BAQEF
-# AASCAgBaqhTT7ioA9ySBdK4Axnd4mBwi/ISKSAeR2BT9GyKE7odJkrp1AsuZPWiT
-# AEtTGmIOM2WdprZVL7e9okgtEy0rjs6YkQIZID5jKt1Yh113TFEuYs1XtT6O/V+A
-# 5ZWnPkqSd5VLwTXLjd0D7XhralOxbdjAv0+yb38RBiUePpJrUziIgO6T+HjmSPsS
-# vgVmiqVEy8zs/4U2V7A36zCaWaCcclBwROn4PPX11JKq93ib7zGF4AcG05a2aXIB
-# 4bVu7j9DIYW4YrQiSOIfhuWjgMsZlw84T/nM+dZxolAfMBBKZylYiHlghwcYbpbz
-# 8lfYcJuKGgkaMLGuIcO/xbZ9tQmcvX/Xr/JWXaH9N9vI8wd5UeKf8nPJOQxB7M51
-# d8jwN2SXm3fJ82tMgxK3YiI+Jsj9hFxM6x7E1qnuyUFP/z5BqcRPLDoETVpV5Jgx
-# Nj4Xte/1j4fWpKUsdIOXPsuHrXmXJzlJU4ZClFF+QzjB6ZktTH/+CNLaz31BG0Br
-# 3Kcsha0QKDO/qxJngYHVPh62BRqjzayUTVIDPNODwVY+Qsf2FFMFGzg71/en51bS
-# 8CYI1nMUXQiaWm+P2LeowLOgV1ysQAmS5JUFUO3cYEddryj7I+ck+xQgq/+hrVj3
-# lecSNM38SpEGTmCf/Cwdzs6Np1DUnQf7tNzzQ2aYRr0haVY+zg==
+# AQcBMBwGCSqGSIb3DQEJBTEPFw0yMzAzMTMwMDI3MDRaMC8GCSqGSIb3DQEJBDEi
+# BCDyUR4hu+NG2MgbT0nRVAK/DEAfiULeyqpayqMtkNIr7jANBgkqhkiG9w0BAQEF
+# AASCAgASUsibNm+KdocDuGJZagdkSwcwT7eKKs2yu03dxEMt6mzjq4QU7XFZTK+X
+# eoYUr43Eeav9Kfgp3Qrus0znsTJXnwUatUl25DpkLiu4l/PxxyQge5xalbmLybQs
+# 8uY9oWXQl29s1JKWrjA3+yv2wLOQABZrqi+FMFjRpyxk/kzjEWpt7mKjRVA8WwGR
+# PisaOJGug3I9S0S/8+x2wG/gcynSP7Hj+gKAw4YZNMfOay9Dz0aUwrYWbi1uT9PH
+# avCIQMpuhlXppJTE/wIbl2Xm1ytUChQoenkUgauEKQLMTMT0CI1YS8r8ILvykjzX
+# MvyMw4LT13E5sXs0GSJO1KZmta0RFqiwkBGedsOFp/bMlM3cGGiHnYQ9o3CH7Ht0
+# 2t7BT17PRXGdt4W2zZs3ZsVq87Cah3p6dnV4G35IPGire6R/A0OskKXEeH2+9bFR
+# kmcDpljBCHXwHLQnVZAxu+l02hzu42WbMFm8TcmO9/XysvoNxSRO/zzlwZbfkRm4
+# BkECYPAAoIJuf58dF4kUp5/Ck4PDulxgdjGzH5lkSNvEdSggCzBg+EmL52NNlCqN
+# 4rSBnpkdGgcFWijPKkdKkYwQttgjc7zMvqknazuiGsp7GFhwUkeTfA3LFMV/1Z5N
+# 89TyrjiLeUW4mCUUN6eoR013aCuSsHepMOXUop3tHu8kq2igGg==
 # SIG # End signature block
