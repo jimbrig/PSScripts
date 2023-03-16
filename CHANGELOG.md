@@ -8,6 +8,7 @@
 
 ### Bug Fixes
 
+- Fix Update Update-Modules - Test-IsAdmin ([#17](https://github.com/orhun/git-cliff/issues/17))
 - Fix markdown in New-PSCustomScript util
 - Fix all READMEs and badges
 - Add external module deps for script
