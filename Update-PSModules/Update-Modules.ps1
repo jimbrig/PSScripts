@@ -19,7 +19,7 @@ Function Update-Modules {
         [switch]$AllowPrerelease
     )    
 
-    If (!Test-IsAdmin) {
+    If (!(Test-IsAdmin)) {
         Write-Warning "You must be an administrator to run this script."
         throw
     }
@@ -39,7 +39,6 @@ Function Update-Modules {
     }
 
     # Show status of AllowPrerelease Switch
-    ''
     if ($AllowPrerelease) {
         Write-Host ("Updating installed modules to the latest PreRelease version ...") -ForegroundColor Green
     }
