@@ -27,6 +27,7 @@
 
 ### Features
 
+- Bump Update Update-PSModules version for bugfix
 - Add Remove-OldDrivers
 - Update all scripts code-signing signature
 - Publish nupkg for Trace-NetworkAdapter script to LocalRegistry
