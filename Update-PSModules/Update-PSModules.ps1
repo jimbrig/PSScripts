@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 1.0.3
+.VERSION 1.0.4
 
 .GUID 3187ed58-720b-4e9c-b3c2-707c00842fdf
 
@@ -26,6 +26,9 @@
 .EXTERNALSCRIPTDEPENDENCIES Test-IsAdmin.ps1,Update-Modules.ps1
 
 .RELEASENOTES
+
+1.0.4
+Bugfix for Test-IsAdmin per Issue #17
 
 1.0.3
 Fixed Project URL
