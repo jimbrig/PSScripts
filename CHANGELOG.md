@@ -28,6 +28,7 @@
 
 ### Features
 
+- Add publish.yml
 - Bump Update Update-PSModules version for bugfix
 - Add Remove-OldDrivers
 - Update all scripts code-signing signature
