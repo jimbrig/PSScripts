@@ -24,10 +24,18 @@ If ($null -eq $Env:NUGET_API_TOKEN) {
 #}
 
 ForEach ($scriptFile in $scriptFiles) {
+    $ErrorActionPreference = "Continue"
     Test-ScriptFileInfo -Path $scriptFile
     # Set-ScriptSignature -ScriptPath $scriptFile
     # Publish-Script -Path $scriptFile -Repository LocalRegistry -NuGetApiKey $Env:NUGET_API_TOKEN -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
-    Publish-Script -Path $scriptFile -NuGetApiKey $Env:NUGET_API_TOKEN -Verbose -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    try {
+        Publish-Script -Path $scriptFile -NuGetApiKey $Env:NUGET_API_TOKEN -Verbose -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    } 
+    catch {
+        Write-Warning "Caught an exception:"
+        Write-Warning "Exception Type: $($_.Exception.GetType().FullName)"
+        Write-Warning "Exception Message: $($_.Exception.Message)"
+    }
 }
 
 # Start-Process "https://www.powershellgallery.com/profiles/jimbrig"
