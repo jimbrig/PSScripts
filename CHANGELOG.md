@@ -18,6 +18,7 @@
 
 ### Documentation
 
+- Update README.md badges
 - Add README for Trace-NetworkAdapter script
 - Fix README links
 - Add CHANGELOG to README
