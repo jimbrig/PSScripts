@@ -1,7 +1,8 @@
 <p>
     <img src="https://github.com/jimbrig/PSXLDevTools/blob/main/resources/images/powershellcore.png?raw=true" align="left" style="float:left" height="8%" width="8%">
     <h1>Custom PowerShell Scripts</h1>
-    <a href="https://www.powershellgallery.com/profiles/jimbrig" target="_blank"><img src="https://img.shields.io/badge/PowerShell%20Gallery-jimbrig-blue" align="right" style="float:right" /></a>
+    <a href="https://www.powershellgallery.com/profiles/jimbrig" target="_blank"><img src="https://img.shields.io/badge/PowerShell%20Gallery-jimbrig-blue" align="left" style="float:left" /></a>
+    <a href="https://github.com/jimbrig/PSScripts/actions/workflows/publish.yml" target="_blank"><img src="https://github.com/jimbrig/PSScripts/actions/workflows/publish.yml/badge.svg" align="left" style="float:left" /></a>
 </p>
 <br>
 
