@@ -1,7 +1,7 @@
 $dirs = (Get-ChildItem -Path $PWD -Directory -Recurse -Exclude @('.utils', 'ScriptCertificates', '.github', '.git', '.LocalRegistry', 'workflows')).Name
 $scriptFiles = ForEach ($dir in $dirs) { ".\$dir\$dir.ps1" }  # $dirs | ForEach-Object { Get-ChildItem -Path "$PSScriptRoot\$_" -Filter *.ps1 -Recurse }
 
-$localRegistry = '.\.LocalRegistry'
+#$localRegistry = '.\.LocalRegistry'
 
 . "$PWD\.utils\Set-ScriptSignature.ps1"
 
@@ -16,17 +16,17 @@ If ($null -eq $Env:NUGET_API_TOKEN) {
 }
 
 # Register the local registry as a trusted package source
-If (!(Get-PackageSource -Name LocalRegistry -ErrorAction SilentlyContinue)) {
-    If (!(Test-Path $localRegistry)) {
-        New-Item -ItemType Directory -Path $localRegistry
-    }
-    Register-PackageSource -Trusted -Provider PowerShellGet -Name LocalRegistry -Location $localRegistry
-}
+#If (!(Get-PackageSource -Name LocalRegistry -ErrorAction SilentlyContinue)) {
+#    If (!(Test-Path $localRegistry)) {
+#        New-Item -ItemType Directory -Path $localRegistry
+#    }
+#    Register-PackageSource -Trusted -Provider PowerShellGet -Name LocalRegistry -Location $localRegistry
+#}
 
 ForEach ($scriptFile in $scriptFiles) {
     Test-ScriptFileInfo -Path $scriptFile
-    Set-ScriptSignature -ScriptPath $scriptFile
-    Publish-Script -Path $scriptFile -Repository LocalRegistry -NuGetApiKey $Env:NUGET_API_TOKEN -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+    # Set-ScriptSignature -ScriptPath $scriptFile
+    # Publish-Script -Path $scriptFile -Repository LocalRegistry -NuGetApiKey $Env:NUGET_API_TOKEN -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
     Publish-Script -Path $scriptFile -NuGetApiKey $Env:NUGET_API_TOKEN -Verbose -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
 }
 
