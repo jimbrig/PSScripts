@@ -1,0 +1,29 @@
+[console]::beep(2000, 1000)
+
+
+# ---------
+$wshell = New-Object -ComObject Wscript.Shell 
+$Output = $wshell.Popup("The task has finished")
+
+# ---------------
+Add-Type -AssemblyName System.Windows.Forms 
+$global:balloon = New-Object System.Windows.Forms.NotifyIcon
+$path = (Get-Process -id $pid).Path
+$balloon.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon($path) 
+$balloon.BalloonTipIcon = [System.Windows.Forms.ToolTipIcon]::Warning 
+$balloon.BalloonTipText = 'What do you think of this balloon tip?'
+$balloon.BalloonTipTitle = "Attention $Env:USERNAME" 
+$balloon.Visible = $true 
+$balloon.ShowBalloonTip(5000)
+
+# ---------------
+$log = "z:\onedrive\mcqh\datasync.log"
+
+$body = "Daily data sync job has started on $(Get-Date)"
+Send-MailMessage -To "support@mydomain.com" -From "backup@mydomain.com" -SMTPServer 192.168.37.8 -Subject "Daily Backup Sync Started" -Body $body
+
+robocopy source target /s /mir /np /log:$log
+robocopy source target /s /mir /np /log+:$log
+
+$body = "Daily data sync job has successfully ended on $(Get-Date) with status code " + (get-scheduledtaskinfo -taskname "Sync Backup").LastTaskResult
+Send-MailMessage -To "support@mydomain.com" -From "backup@mydomain.com" -SMTPServer 192.168.37.8 -Subject "Daily Backup Sync Ended" -Body $body -Attachments $log
