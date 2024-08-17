@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 - Change `.LocalRegistry` to `dist`
 - Build and new src scripts
 - Refactor utils to tools
+- Cleanup cached folders
 
 ### 📚 Documentation
 
@@ -84,6 +85,10 @@ All notable changes to this project will be documented in this file.
 - Autopublish 2023-03-16T23:46:26Z
 - Autopublish 2023-03-16T23:50:30Z
 - Autopublish 2023-03-17T00:11:44Z
+
+### [chore]
+
+- Update changelog
 
 ### Bug
 
