@@ -34,6 +34,7 @@
 
 ## Features
 
+- **script:** Add environment PATH cleanup tool ([4f6c24f](https://github.com/jimbrig/PSScripts/commit/4f6c24fb006a8c41a5b6847bc58994ccfb4961ec))  - (Jimmy Briggs)
 - Add Set-OfficeInsider ([5985274](https://github.com/jimbrig/PSScripts/commit/598527454754f4e185cf64e0d006b1a7ed50cc44))  - (Jimmy Briggs)
 - Add New-DISMReport.ps1 ([39b80c3](https://github.com/jimbrig/PSScripts/commit/39b80c3d75899f2240f7f086ff1da6e18bf30b3a))  - (Jimmy Briggs)
 - Tweak GHA ([83262b3](https://github.com/jimbrig/PSScripts/commit/83262b33da8c2b69f126f1f34ba8db431d42cf6e))  - (Jimmy Briggs)
