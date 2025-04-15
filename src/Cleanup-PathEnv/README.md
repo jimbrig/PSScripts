@@ -1,6 +1,6 @@
 # Cleanup-PathEnv
 
-[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/)](https://www.powershellgallery.com/packages/Cleanup-PathEnv/)
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Cleanup-PathEnv?include_prereleases)](https://www.powershellgallery.com/packages/Cleanup-PathEnv/)
 
 > [!NOTE]
 > *Cleans up the system and user `PATH` environment variables.*
@@ -40,6 +40,9 @@ PowerShell, Script, Environment, PATH, Cleanup, System, User
 ## Release Notes
 
 The latest released version is: [Version 2.0.0](https://www.powershellgallery.com/packages/Cleanup-PathEnv/2.0.0).
+
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Cleanup-PathEnv?version=1.0.0)](https://www.powershellgallery.com/packages/Cleanup-PathEnv/1.0.0) [![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Cleanup-PathEnv?version=2.0.0)](https://www.powershellgallery.com/packages/Cleanup-PathEnv/2.0.0)  
+
 
 ### Version 2.0.0
 
