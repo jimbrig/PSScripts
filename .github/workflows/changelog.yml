@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Git Cliff
-        uses: tj-actions/git-cliff@v1.5.0
+        uses: tj-actions/git-cliff@v2.0.2
         id: git-cliff
         with:
           args: "--verbose"
